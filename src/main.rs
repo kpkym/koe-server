@@ -42,15 +42,12 @@ fn index(data: Data) -> String {
     let json: Value = json::json::get_type(&req);
     let key = json.as_object().unwrap().keys().last().unwrap();
 
-    let code_list = json::json::list_code(json.get(key).unwrap());
-
-    println!("{:?}", code_list);
     let mut result: String = String::new();
     match key.as_str() {
         "get_data" => {
-            result = func::func::get_data(&code_list)
-        }
-
+            let code_list = json::json::list_code(json.get(key).unwrap());
+            result = func::func::get_data(code_list)
+        },
         &_ => {}
     }
 
