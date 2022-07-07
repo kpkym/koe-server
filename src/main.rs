@@ -3,9 +3,13 @@
 #[macro_use]
 extern crate rocket;
 
-use rocket::{Request, Response};
+use std::io::Read;
+
+use rocket::{Data, Request, Response};
 use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::ext::IntoCollection;
 use rocket::http::Header;
+use serde_json::Value;
 
 mod json;
 mod file;
@@ -30,9 +34,28 @@ impl Fairing for CORS {
     }
 }
 
-#[post("/")]
-fn index() -> String {
-    func::func::get_data()
+#[post("/", data = "<data>")]
+fn index(data: Data) -> String {
+    let mut req = String::new();
+
+    data.open().read_to_string(&mut req).unwrap();
+
+    let v: Value = json::json::get_type(&req);
+    let key = v.as_object().unwrap().keys().last().unwrap();
+
+    let code = json::json::list_code(v.get(key).unwrap());
+
+    println!("{:?}", code);
+    let mut result: String = String::new();
+    match key.as_str() {
+        "get_data" => {
+            result = func::func::get_data(&code)
+        }
+
+        &_ => {}
+    }
+
+    result
 }
 
 #[options("/")]
