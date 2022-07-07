@@ -37,19 +37,18 @@ impl Fairing for CORS {
 #[post("/", data = "<data>")]
 fn index(data: Data) -> String {
     let mut req = String::new();
-
     data.open().read_to_string(&mut req).unwrap();
 
-    let v: Value = json::json::get_type(&req);
-    let key = v.as_object().unwrap().keys().last().unwrap();
+    let json: Value = json::json::get_type(&req);
+    let key = json.as_object().unwrap().keys().last().unwrap();
 
-    let code = json::json::list_code(v.get(key).unwrap());
+    let code_list = json::json::list_code(json.get(key).unwrap());
 
-    println!("{:?}", code);
+    println!("{:?}", code_list);
     let mut result: String = String::new();
     match key.as_str() {
         "get_data" => {
-            result = func::func::get_data(&code)
+            result = func::func::get_data(&code_list)
         }
 
         &_ => {}

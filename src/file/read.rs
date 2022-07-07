@@ -11,7 +11,7 @@ pub fn read_data(value: &Vec<String>) -> String {
     let mut result = vec![];
 
     for x in v.as_array().unwrap().into_iter() {
-        if x["code"] == value[0] {
+        if value.contains(&x["code"].as_str().unwrap().to_string()) {
             result.push(x);
         }
     }
