@@ -48,6 +48,10 @@ fn index(data: Data) -> String {
             let code_list = json::json::list_code(json.get(key).unwrap());
             result = func::func::get_data(code_list)
         },
+        "koe_list" => {
+            let code_list = json.get(key).unwrap().as_str().unwrap().to_string();
+            result = func::func::koe_list(code_list)
+        },
         &_ => {}
     }
 

@@ -5,8 +5,16 @@ use crate::file::read;
 pub fn koe_open() {}
 
 pub fn koe_list(code: String) -> String {
+    let mut result = vec![];
+    let v: Value = serde_json::from_str(&read::read_nas()).expect("err");
 
-    "".to_string()
+    for x in v.as_array().unwrap().into_iter() {
+        if x["type"].as_str().unwrap() == "D" && x.to_string().contains(code.as_str()) {
+            result.push(x);
+        }
+    }
+
+    serde_json::to_string(&result).unwrap()
 }
 
 pub fn direct_open() {}
