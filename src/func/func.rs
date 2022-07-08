@@ -1,3 +1,5 @@
+use std::process::Command;
+
 use serde_json::Value;
 
 use crate::file::read;
@@ -22,7 +24,12 @@ pub fn koe_list(code: String) -> String {
     serde_json::to_string(&result).unwrap()
 }
 
-pub fn direct_open() {}
+pub fn direct_open(path: String) {
+    Command::new("open")
+        .arg(path)
+        .output()
+        .unwrap();
+}
 
 pub fn get_data(value: Vec<String>) -> String {
     let mut result = vec![];

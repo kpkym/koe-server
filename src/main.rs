@@ -52,6 +52,10 @@ fn index(data: Data) -> String {
             let code = json.get(key).unwrap().as_str().unwrap().to_string();
             result = func::func::koe_list(code);
         },
+        "direct_open" => {
+            let path = json.get(key).unwrap().as_str().unwrap().to_string();
+            func::func::direct_open(path);
+        },
         &_ => {}
     }
 
