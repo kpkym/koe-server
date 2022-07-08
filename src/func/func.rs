@@ -14,6 +14,11 @@ pub fn koe_list(code: String) -> String {
         }
     }
 
+    let search_list = crate::file::search::search(code);
+    for x in search_list.iter() {
+        result.push(x);
+    }
+
     serde_json::to_string(&result).unwrap()
 }
 

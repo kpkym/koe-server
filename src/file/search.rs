@@ -1,7 +1,10 @@
+use std::collections::HashMap;
 use std::io::{self, Write};
 use std::process::Command;
 
-pub fn search(code: String) -> Vec<String> {
+use serde_json::{Map, Value};
+
+pub fn search(code: String) -> Vec<Value> {
     let mut result = vec![];
 
     for x in vec![
@@ -18,7 +21,11 @@ pub fn search(code: String) -> Vec<String> {
         if string != "" {
             for x in string.split("\n").collect::<Vec<&str>>() {
                 if x != "" {
-                    result.push(x.to_string());
+                    let mut v = Map::new();
+
+                    v.insert("type".to_string(), Value::String("D".to_string()));
+                    v.insert("path".to_string(), Value::String(x.to_string()));
+                    result.push(Value::Object(v));
                 }
             }
         }
